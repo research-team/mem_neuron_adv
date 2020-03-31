@@ -5545,6 +5545,174 @@ Source: AVX .. aphvc.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="analog-devices" urn="urn:adsk.eagle:library:102">
+<description>&lt;b&gt;Analog Devices Components&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="SO8" urn="urn:adsk.eagle:footprint:30958/1" library_version="6">
+<description>&lt;b&gt;SMALL OUTLINE INTEGRATED CIRCUIT&lt;/b&gt; SOP-8L&lt;p&gt;
+Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
+<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.9" x2="-2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.4" x2="-2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="1.9" x2="2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<smd name="2" x="-0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="7" x="-0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="1" x="-1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="3" x="0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="4" x="1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="8" x="-1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="6" x="0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="5" x="1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<text x="-3.175" y="-1.905" size="1.27" layer="25" rot="R90">&gt;NAME</text>
+<text x="4.445" y="-1.905" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<rectangle x1="-2.1501" y1="-3.1001" x2="-1.6599" y2="-2" layer="51"/>
+<rectangle x1="-0.8801" y1="-3.1001" x2="-0.3899" y2="-2" layer="51"/>
+<rectangle x1="0.3899" y1="-3.1001" x2="0.8801" y2="-2" layer="51"/>
+<rectangle x1="1.6599" y1="-3.1001" x2="2.1501" y2="-2" layer="51"/>
+<rectangle x1="1.6599" y1="2" x2="2.1501" y2="3.1001" layer="51"/>
+<rectangle x1="0.3899" y1="2" x2="0.8801" y2="3.1001" layer="51"/>
+<rectangle x1="-0.8801" y1="2" x2="-0.3899" y2="3.1001" layer="51"/>
+<rectangle x1="-2.1501" y1="2" x2="-1.6599" y2="3.1001" layer="51"/>
+</package>
+<package name="LFCSP8_CP" urn="urn:adsk.eagle:footprint:3862/1" library_version="6">
+<description>&lt;b&gt;8-Lead Lead Frame Chip Scale Package&lt;/b&gt; LFCSP_WD 2 mm × 2 mm Body, Very Very Thin, Dual Lead&lt;p&gt;
+Source: http://www.analog.com/static/imported-files/data_sheets/ADA4075-2.pdf</description>
+<wire x1="-0.95" y1="0.95" x2="0.95" y2="0.95" width="0.1016" layer="51"/>
+<wire x1="0.95" y1="0.95" x2="0.95" y2="-0.95" width="0.1016" layer="51"/>
+<wire x1="0.95" y1="-0.95" x2="-0.95" y2="-0.95" width="0.1016" layer="51"/>
+<wire x1="-0.95" y1="-0.95" x2="-0.95" y2="0.95" width="0.1016" layer="51"/>
+<circle x="-0.65" y="0.65" radius="0.125" width="0" layer="51"/>
+<smd name="1" x="-0.75" y="0.75" dx="0.8" dy="0.3" layer="1" stop="no" cream="no"/>
+<smd name="2" x="-0.75" y="0.25" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="3" x="-0.75" y="-0.25" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="4" x="-0.75" y="-0.75" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="5" x="0.75" y="-0.75" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="6" x="0.75" y="-0.25" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="7" x="0.75" y="0.25" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<smd name="8" x="0.75" y="0.75" dx="0.8" dy="0.3" layer="1" roundness="75" stop="no" cream="no"/>
+<text x="-1.1776" y="1.076" size="1.27" layer="25">&gt;NAME</text>
+<text x="-1.1526" y="-2.379" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-1.175" y1="0.575" x2="-0.325" y2="0.925" layer="29"/>
+<rectangle x1="-1.175" y1="0.075" x2="-0.325" y2="0.425" layer="29"/>
+<rectangle x1="-1.175" y1="-0.425" x2="-0.325" y2="-0.075" layer="29"/>
+<rectangle x1="-1.175" y1="-0.925" x2="-0.325" y2="-0.575" layer="29"/>
+<rectangle x1="-1.125" y1="0.625" x2="-0.375" y2="0.875" layer="31"/>
+<rectangle x1="-1.1" y1="0.125" x2="-0.4" y2="0.375" layer="31"/>
+<rectangle x1="-1.1" y1="-0.375" x2="-0.4" y2="-0.125" layer="31"/>
+<rectangle x1="-1.1" y1="-0.875" x2="-0.4" y2="-0.625" layer="31"/>
+<rectangle x1="0.325" y1="-0.925" x2="1.175" y2="-0.575" layer="29" rot="R180"/>
+<rectangle x1="0.325" y1="-0.425" x2="1.175" y2="-0.075" layer="29" rot="R180"/>
+<rectangle x1="0.4" y1="-0.875" x2="1.1" y2="-0.625" layer="31" rot="R180"/>
+<rectangle x1="0.4" y1="-0.375" x2="1.1" y2="-0.125" layer="31" rot="R180"/>
+<rectangle x1="0.325" y1="0.075" x2="1.175" y2="0.425" layer="29" rot="R180"/>
+<rectangle x1="0.325" y1="0.575" x2="1.175" y2="0.925" layer="29" rot="R180"/>
+<rectangle x1="0.4" y1="0.125" x2="1.1" y2="0.375" layer="31" rot="R180"/>
+<rectangle x1="0.4" y1="0.625" x2="1.1" y2="0.875" layer="31" rot="R180"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="SO8" urn="urn:adsk.eagle:package:30987/2" type="model" library_version="6">
+<description>SMALL OUTLINE INTEGRATED CIRCUIT SOP-8L
+Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
+<packageinstances>
+<packageinstance name="SO8"/>
+</packageinstances>
+</package3d>
+<package3d name="LFCSP8_CP" urn="urn:adsk.eagle:package:3969/1" type="box" library_version="6">
+<description>8-Lead Lead Frame Chip Scale Package LFCSP_WD 2 mm × 2 mm Body, Very Very Thin, Dual Lead
+Source: http://www.analog.com/static/imported-files/data_sheets/ADA4075-2.pdf</description>
+<packageinstances>
+<packageinstance name="LFCSP8_CP"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="OP" urn="urn:adsk.eagle:symbol:3727/1" library_version="6">
+<wire x1="-2.54" y1="5.08" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-5.08" x2="7.62" y2="0" width="0.254" layer="94"/>
+<wire x1="7.62" y1="0" x2="-2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-2.032" y1="2.54" x2="-1.016" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="-1.524" y1="3.048" x2="-1.524" y2="2.032" width="0.1524" layer="94"/>
+<wire x1="-2.032" y1="-2.54" x2="-1.016" y2="-2.54" width="0.1524" layer="94"/>
+<text x="3.81" y="3.81" size="1.778" layer="95">&gt;NAME</text>
+<text x="3.81" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="IN+" x="-5.08" y="2.54" visible="pad" length="short" direction="in"/>
+<pin name="IN-" x="-5.08" y="-2.54" visible="pad" length="short" direction="in"/>
+<pin name="OUT" x="10.16" y="0" visible="pad" length="short" direction="out" rot="R180"/>
+</symbol>
+<symbol name="PWR+-" urn="urn:adsk.eagle:symbol:3726/1" library_version="6">
+<text x="1.27" y="3.81" size="1.778" layer="95">&gt;NAME</text>
+<text x="1.27" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="V+" x="0" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
+<pin name="V-" x="0" y="-7.62" visible="pad" length="middle" direction="pwr" rot="R90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ADA4692-2" urn="urn:adsk.eagle:component:4139/4" prefix="IC" library_version="6">
+<description>&lt;b&gt;Low Power, 3.6 MHz, Low Noise, Rail-to-Rail Output, Operational Amplifiers&lt;/b&gt;&lt;p&gt;
+Source: http://www.analog.com/static/imported-files/data_sheets/ADA4691-2_4692-2_4692-4.pdf</description>
+<gates>
+<gate name="A" symbol="OP" x="-10.16" y="7.62"/>
+<gate name="B" symbol="OP" x="-10.16" y="-7.62"/>
+<gate name="P" symbol="PWR+-" x="7.62" y="0"/>
+</gates>
+<devices>
+<device name="R" package="SO8">
+<connects>
+<connect gate="A" pin="IN+" pad="3"/>
+<connect gate="A" pin="IN-" pad="2"/>
+<connect gate="A" pin="OUT" pad="1"/>
+<connect gate="B" pin="IN+" pad="5"/>
+<connect gate="B" pin="IN-" pad="6"/>
+<connect gate="B" pin="OUT" pad="7"/>
+<connect gate="P" pin="V+" pad="8"/>
+<connect gate="P" pin="V-" pad="4"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:30987/2"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="ADA4692-2ARZ" constant="no"/>
+<attribute name="OC_FARNELL" value="1760810" constant="no"/>
+<attribute name="OC_NEWARK" value="05R6523" constant="no"/>
+<attribute name="POPULARITY" value="0" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="CP" package="LFCSP8_CP">
+<connects>
+<connect gate="A" pin="IN+" pad="3"/>
+<connect gate="A" pin="IN-" pad="2"/>
+<connect gate="A" pin="OUT" pad="1"/>
+<connect gate="B" pin="IN+" pad="5"/>
+<connect gate="B" pin="IN-" pad="6"/>
+<connect gate="B" pin="OUT" pad="7"/>
+<connect gate="P" pin="V+" pad="8"/>
+<connect gate="P" pin="V-" pad="4"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:3969/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="1827383" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+<attribute name="POPULARITY" value="0" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -5620,6 +5788,7 @@ Source: AVX .. aphvc.pdf</description>
 <part name="P-10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="-5V" device=""/>
 <part name="GND21" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
+<part name="IC3" library="analog-devices" library_urn="urn:adsk.eagle:library:102" deviceset="ADA4692-2" device="R" package3d_urn="urn:adsk.eagle:package:30987/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -5807,18 +5976,18 @@ Source: AVX .. aphvc.pdf</description>
 <instance part="GND16" gate="1" x="38.1" y="101.6" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="40.64" y="99.06" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="JP1" gate="A" x="396.24" y="213.36" smashed="yes">
-<attribute name="NAME" x="389.89" y="219.075" size="1.778" layer="95"/>
-<attribute name="VALUE" x="389.89" y="205.74" size="1.778" layer="96"/>
+<instance part="JP1" gate="A" x="134.62" y="220.98" smashed="yes">
+<attribute name="NAME" x="128.27" y="226.695" size="1.778" layer="95"/>
+<attribute name="VALUE" x="128.27" y="213.36" size="1.778" layer="96"/>
 </instance>
-<instance part="P+1" gate="1" x="383.54" y="226.06" smashed="yes">
-<attribute name="VALUE" x="381" y="220.98" size="1.778" layer="96" rot="R90"/>
+<instance part="P+1" gate="1" x="121.92" y="233.68" smashed="yes">
+<attribute name="VALUE" x="119.38" y="228.6" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="P-11" gate="1" x="383.54" y="200.66" smashed="yes">
-<attribute name="VALUE" x="381" y="198.12" size="1.778" layer="96" rot="R90"/>
+<instance part="P-11" gate="1" x="121.92" y="208.28" smashed="yes">
+<attribute name="VALUE" x="119.38" y="205.74" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="GND20" gate="1" x="375.92" y="205.74" smashed="yes" rot="MR0">
-<attribute name="VALUE" x="378.46" y="203.2" size="1.778" layer="96" rot="MR0"/>
+<instance part="GND20" gate="1" x="114.3" y="213.36" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="116.84" y="210.82" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="P+2" gate="1" x="304.8" y="231.14" smashed="yes">
 <attribute name="VALUE" x="302.26" y="226.06" size="1.778" layer="96" rot="R90"/>
@@ -5826,15 +5995,27 @@ Source: AVX .. aphvc.pdf</description>
 <instance part="P-10" gate="1" x="304.8" y="200.66" smashed="yes">
 <attribute name="VALUE" x="302.26" y="198.12" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="GND21" gate="1" x="104.14" y="203.2" smashed="yes">
-<attribute name="VALUE" x="101.6" y="200.66" size="1.778" layer="96"/>
+<instance part="GND21" gate="1" x="66.04" y="208.28" smashed="yes">
+<attribute name="VALUE" x="63.5" y="205.74" size="1.778" layer="96"/>
 </instance>
-<instance part="JP4" gate="A" x="116.84" y="215.9" smashed="yes">
-<attribute name="NAME" x="110.49" y="226.695" size="1.778" layer="95"/>
-<attribute name="VALUE" x="110.49" y="205.74" size="1.778" layer="96"/>
+<instance part="JP4" gate="A" x="78.74" y="220.98" smashed="yes">
+<attribute name="NAME" x="72.39" y="231.775" size="1.778" layer="95"/>
+<attribute name="VALUE" x="72.39" y="210.82" size="1.778" layer="96"/>
 </instance>
 <instance part="IC2" gate="P" x="63.5" y="76.2" smashed="yes">
 <attribute name="NAME" x="62.865" y="75.565" size="1.778" layer="95"/>
+</instance>
+<instance part="IC3" gate="A" x="276.86" y="91.44" smashed="yes">
+<attribute name="NAME" x="280.67" y="95.25" size="1.778" layer="95"/>
+<attribute name="VALUE" x="280.67" y="86.36" size="1.778" layer="96"/>
+</instance>
+<instance part="IC3" gate="B" x="276.86" y="66.04" smashed="yes">
+<attribute name="NAME" x="280.67" y="69.85" size="1.778" layer="95"/>
+<attribute name="VALUE" x="280.67" y="60.96" size="1.778" layer="96"/>
+</instance>
+<instance part="IC3" gate="P" x="314.96" y="78.74" smashed="yes">
+<attribute name="NAME" x="316.23" y="82.55" size="1.778" layer="95"/>
+<attribute name="VALUE" x="316.23" y="73.66" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -5893,8 +6074,8 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP4" gate="A" pin="5"/>
-<wire x1="114.3" y1="213.36" x2="99.06" y2="213.36" width="0.1524" layer="91"/>
-<label x="99.06" y="213.36" size="1.778" layer="95"/>
+<wire x1="76.2" y1="218.44" x2="60.96" y2="218.44" width="0.1524" layer="91"/>
+<label x="60.96" y="218.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="MOSI" class="0">
@@ -5950,8 +6131,8 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP4" gate="A" pin="3"/>
-<wire x1="114.3" y1="218.44" x2="99.06" y2="218.44" width="0.1524" layer="91"/>
-<label x="99.06" y="218.44" size="1.778" layer="95"/>
+<wire x1="76.2" y1="223.52" x2="60.96" y2="223.52" width="0.1524" layer="91"/>
+<label x="60.96" y="223.52" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="MISO" class="0">
@@ -5997,8 +6178,8 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP4" gate="A" pin="4"/>
-<wire x1="114.3" y1="215.9" x2="99.06" y2="215.9" width="0.1524" layer="91"/>
-<label x="99.06" y="215.9" size="1.778" layer="95"/>
+<wire x1="76.2" y1="220.98" x2="60.96" y2="220.98" width="0.1524" layer="91"/>
+<label x="60.96" y="220.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -6109,15 +6290,15 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP1" gate="A" pin="2"/>
-<wire x1="393.7" y1="213.36" x2="375.92" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="375.92" y1="213.36" x2="375.92" y2="208.28" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="220.98" x2="114.3" y2="220.98" width="0.1524" layer="91"/>
+<wire x1="114.3" y1="220.98" x2="114.3" y2="215.9" width="0.1524" layer="91"/>
 <pinref part="GND20" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="GND21" gate="1" pin="GND"/>
-<wire x1="104.14" y1="205.74" x2="104.14" y2="210.82" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="210.82" x2="66.04" y2="215.9" width="0.1524" layer="91"/>
 <pinref part="JP4" gate="A" pin="6"/>
-<wire x1="114.3" y1="210.82" x2="104.14" y2="210.82" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="215.9" x2="66.04" y2="215.9" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+2V5" class="0">
@@ -6608,8 +6789,8 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP4" gate="A" pin="2"/>
-<wire x1="114.3" y1="220.98" x2="99.06" y2="220.98" width="0.1524" layer="91"/>
-<label x="99.06" y="220.98" size="1.778" layer="95"/>
+<wire x1="76.2" y1="226.06" x2="60.96" y2="226.06" width="0.1524" layer="91"/>
+<label x="60.96" y="226.06" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CS_IN" class="0">
@@ -6620,15 +6801,15 @@ Source: AVX .. aphvc.pdf</description>
 </segment>
 <segment>
 <pinref part="JP4" gate="A" pin="1"/>
-<wire x1="114.3" y1="223.52" x2="99.06" y2="223.52" width="0.1524" layer="91"/>
-<label x="99.06" y="223.52" size="1.778" layer="95"/>
+<wire x1="76.2" y1="228.6" x2="60.96" y2="228.6" width="0.1524" layer="91"/>
+<label x="60.96" y="228.6" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="-5V" class="0">
 <segment>
 <pinref part="JP1" gate="A" pin="3"/>
-<wire x1="393.7" y1="210.82" x2="383.54" y2="210.82" width="0.1524" layer="91"/>
-<wire x1="383.54" y1="210.82" x2="383.54" y2="203.2" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="218.44" x2="121.92" y2="218.44" width="0.1524" layer="91"/>
+<wire x1="121.92" y1="218.44" x2="121.92" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="P-11" gate="1" pin="-5V"/>
 </segment>
 <segment>
@@ -6641,8 +6822,8 @@ Source: AVX .. aphvc.pdf</description>
 <net name="+5V" class="0">
 <segment>
 <pinref part="JP1" gate="A" pin="1"/>
-<wire x1="393.7" y1="215.9" x2="383.54" y2="215.9" width="0.1524" layer="91"/>
-<wire x1="383.54" y1="215.9" x2="383.54" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="223.52" x2="121.92" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="121.92" y1="223.52" x2="121.92" y2="231.14" width="0.1524" layer="91"/>
 <pinref part="P+1" gate="1" pin="+5V"/>
 </segment>
 <segment>

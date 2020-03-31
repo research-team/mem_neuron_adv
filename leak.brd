@@ -1534,6 +1534,50 @@ Source: http://focus.ti.com/lit/ds/symlink/ads1271.pdf</description>
 </package3d>
 </packages3d>
 </library>
+<library name="analog-devices" urn="urn:adsk.eagle:library:102">
+<description>&lt;b&gt;Analog Devices Components&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="SO8" urn="urn:adsk.eagle:footprint:30958/1" library_version="6">
+<description>&lt;b&gt;SMALL OUTLINE INTEGRATED CIRCUIT&lt;/b&gt; SOP-8L&lt;p&gt;
+Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
+<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.9" x2="-2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.4" x2="-2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="1.9" x2="2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<smd name="2" x="-0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="7" x="-0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="1" x="-1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="3" x="0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="4" x="1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="8" x="-1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="6" x="0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="5" x="1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<text x="-3.175" y="-1.905" size="1.27" layer="25" rot="R90">&gt;NAME</text>
+<text x="4.445" y="-1.905" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<rectangle x1="-2.1501" y1="-3.1001" x2="-1.6599" y2="-2" layer="51"/>
+<rectangle x1="-0.8801" y1="-3.1001" x2="-0.3899" y2="-2" layer="51"/>
+<rectangle x1="0.3899" y1="-3.1001" x2="0.8801" y2="-2" layer="51"/>
+<rectangle x1="1.6599" y1="-3.1001" x2="2.1501" y2="-2" layer="51"/>
+<rectangle x1="1.6599" y1="2" x2="2.1501" y2="3.1001" layer="51"/>
+<rectangle x1="0.3899" y1="2" x2="0.8801" y2="3.1001" layer="51"/>
+<rectangle x1="-0.8801" y1="2" x2="-0.3899" y2="3.1001" layer="51"/>
+<rectangle x1="-2.1501" y1="2" x2="-1.6599" y2="3.1001" layer="51"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="SO8" urn="urn:adsk.eagle:package:30987/2" type="model" library_version="6">
+<description>SMALL OUTLINE INTEGRATED CIRCUIT SOP-8L
+Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
+<packageinstances>
+<packageinstance name="SO8"/>
+</packageinstances>
+</package3d>
+</packages3d>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1824,6 +1868,15 @@ design rules under a new name.</description>
 <element name="ICA" library="untitled" library_urn="urn:adsk.eagle:library:17376147" package="MSOP10" package3d_urn="urn:adsk.eagle:package:3944/3" value="AD5270MSOP10" x="-34.29" y="19.05" smashed="yes">
 <attribute name="NAME" x="-36.322" y="16.51" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="-30.988" y="16.51" size="1.27" layer="27" ratio="10" rot="R90"/>
+</element>
+<element name="IC3" library="analog-devices" library_urn="urn:adsk.eagle:library:102" package="SO8" package3d_urn="urn:adsk.eagle:package:30987/2" value="ADA4692-2R" x="-46.99" y="-6.35" smashed="yes">
+<attribute name="MF" value="" x="-46.99" y="-6.35" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="ADA4692-2ARZ" x="-46.99" y="-6.35" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-50.165" y="-8.255" size="1.27" layer="25" rot="R90"/>
+<attribute name="OC_FARNELL" value="1760810" x="-46.99" y="-6.35" size="1.778" layer="27" display="off"/>
+<attribute name="OC_NEWARK" value="05R6523" x="-46.99" y="-6.35" size="1.778" layer="27" display="off"/>
+<attribute name="POPULARITY" value="0" x="-46.99" y="-6.35" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="-42.545" y="-8.255" size="1.27" layer="27" rot="R90"/>
 </element>
 </elements>
 <signals>
@@ -2160,6 +2213,12 @@ design rules under a new name.</description>
 <contactref element="IC2" pad="10"/>
 <contactref element="IC1" pad="10"/>
 <wire x1="-27.305" y1="34.8234" x2="13.335" y2="23.3934" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="V+">
+<contactref element="IC3" pad="8"/>
+</signal>
+<signal name="V-">
+<contactref element="IC3" pad="4"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
