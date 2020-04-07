@@ -4,3 +4,7 @@ Memristive neuron with selectable weights
 
 Idea: 
 ![alt text](nucleous_detailed.png "Basic idea")
+Last version schema: 
+![alt text](schema.png "schema")
+Last version board: 
+![alt text](board.png "board")
