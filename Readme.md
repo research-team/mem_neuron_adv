@@ -9,5 +9,5 @@ Last version neuron schema:
 ![schema](neuron_schema.png "schema")
 
 Last version neuron board: 
-<img src="neuron_board.png" alt="board" width="600" height="600">
-![board](neuron_board.png=250x250 "board" )
+
+<img src="neuron_board.png" alt="board" width="341" height="406">
