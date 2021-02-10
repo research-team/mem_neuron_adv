@@ -296,7 +296,6 @@ UsedLibraryUrn="urn:adsk.eagle:library:530"
 UsedLibraryUrn="urn:adsk.eagle:library:532"
 UsedLibraryUrn="urn:adsk.eagle:library:127"
 UsedLibraryUrn="urn:adsk.eagle:library:370"
-UsedLibraryUrn="urn:adsk.eagle:library:534"
 UsedLibraryUrn="urn:adsk.eagle:library:390"
 UsedLibraryUrn="urn:adsk.eagle:library:413"
 UsedLibraryUrn="urn:adsk.eagle:library:446"
@@ -394,9 +393,9 @@ UsedLibrary="C:/Users/yura/Documents/EAGLE/libraries/personal/stm32.lbr"
 
 [Win_1]
 Type="Schematic Editor"
-Number=2
-File="C:/Users/yura/Documents/EAGLE/projects/502-mem-testbench/analog.sch"
-View="-3.46529 -203.978 462.903 311.979"
+Number=1
+File="neuron.sch"
+View="-9.6033 -158.607 488.712 570.945"
 WireWidths=" 0.0762 0.1016 0.127 0.15 0.2 0.2032 0.254 0.3048 0.4064 0.508 0.6096 0.8128 1.016 1.27 2.54 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.65 0.7 0.75 0.8 0.85 0.9 1 0.6"
@@ -439,9 +438,9 @@ Sheet="1"
 
 [Win_2]
 Type="Board Editor"
-Number=1
-File="C:/Users/yura/Documents/EAGLE/projects/502-mem-testbench/analog.brd"
-View="34.8249 34.2369 68.4161 61.3112"
+Number=2
+File="neuron.brd"
+View="-9.17714 -14.4989 84.086 66.8404"
 WireWidths=" 0.0762 0.1016 0.127 0.15 0.2 0.2032 0.254 0.3048 0.4064 0.508 0.6096 0.8128 1.016 1.27 2.54 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.65 0.7 0.75 0.8 0.85 0.9 1 0.6"
