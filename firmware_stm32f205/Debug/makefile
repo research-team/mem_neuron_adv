@@ -69,8 +69,8 @@ all: main-build
 main-build: mem_neuro_adv_stm32f205.elf secondary-outputs
 
 # Tool invocations
-mem_neuro_adv_stm32f205.elf: $(OBJS) $(USER_OBJS) C:\Users\yura\STM32CubeIDE\workspace_1.5.1\mem_neuro_adv_stm32f205\STM32F205RETX_FLASH.ld
-	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\yura\STM32CubeIDE\workspace_1.5.1\mem_neuro_adv_stm32f205\STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+mem_neuro_adv_stm32f205.elf: $(OBJS) $(USER_OBJS) /home/yura/Documents/mem_neuron_adv/firmware_stm32f205/STM32F205RETX_FLASH.ld
+	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/home/yura/Documents/mem_neuron_adv/firmware_stm32f205/STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
