@@ -105,7 +105,9 @@ void Error_Handler(void);
 #define Q1_Pin GPIO_PIN_15
 #define Q1_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
-
+#define SET_BITN(BYTE, BIT) SET_BIT(BYTE, (1<<BIT))
+#define RESET_BITN(BYTE, BIT) CLEAR_BIT(BYTE, (1<<BIT))
+#define READ_BITN(BYTE, BIT) READ_BIT(BYTE, (1<<BIT))>>BIT
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

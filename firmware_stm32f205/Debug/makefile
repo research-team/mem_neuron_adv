@@ -1,5 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
+# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
 -include ../makefile.init
@@ -43,6 +44,12 @@ endif
 
 -include ../makefile.defs
 
+OPTIONAL_TOOL_DEPS := \
+$(wildcard ../makefile.defs) \
+$(wildcard ../makefile.init) \
+$(wildcard ../makefile.targets) \
+
+
 BUILD_ARTIFACT_NAME := mem_neuro_adv_stm32f205
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX := 
@@ -69,22 +76,22 @@ all: main-build
 main-build: mem_neuro_adv_stm32f205.elf secondary-outputs
 
 # Tool invocations
-mem_neuro_adv_stm32f205.elf: $(OBJS) $(USER_OBJS) /home/yura/Documents/mem_neuron_adv/firmware_stm32f205/STM32F205RETX_FLASH.ld
-	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/home/yura/Documents/mem_neuron_adv/firmware_stm32f205/STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+mem_neuro_adv_stm32f205.elf: $(OBJS) $(USER_OBJS) C:\Users\YurBurGer\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205\STM32F205RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\YurBurGer\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205\STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-default.size.stdout: $(EXECUTABLES)
+default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-size  $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-mem_neuro_adv_stm32f205.list: $(EXECUTABLES)
+mem_neuro_adv_stm32f205.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "mem_neuro_adv_stm32f205.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-mem_neuro_adv_stm32f205.bin: $(EXECUTABLES)
+mem_neuro_adv_stm32f205.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "mem_neuro_adv_stm32f205.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
