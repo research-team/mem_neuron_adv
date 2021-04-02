@@ -54,6 +54,23 @@ DMA_HandleTypeDef hdma_usart2_tx;
 
 /* USER CODE BEGIN PV */
 uint8_t flags=0;
+//total boards in chain
+uint8_t board_cnt=1;
+//current board number
+uint8_t board_num=0;
+//last spike time
+int32_t last_spike=0;
+//width of spike storage
+uint8_t spike_wid=0;
+//if channel is excitatory
+//bitwise info - all channels are excitatory
+uint8_t ex_channels = 0xFF;
+//GPIO info for each channel;
+//signal level is Apin-Bpin
+uint16_t Apin[8]={Q2_Pin,Q4_Pin,Q6_Pin,Q8_Pin,Q10_Pin,Q12_Pin,Q14_Pin,Q16_Pin};
+uint16_t Bpin[8]={Q1_Pin,Q3_Pin,Q5_Pin,Q7_Pin,Q9_Pin,Q11_Pin,Q13_Pin,Q15_Pin};
+GPIO_TypeDef* Aport[8]={Q2_GPIO_Port,Q4_GPIO_Port,Q6_GPIO_Port,Q8_GPIO_Port,Q10_GPIO_Port,Q12_GPIO_Port,Q14_GPIO_Port,Q16_GPIO_Port};
+GPIO_TypeDef* Bport[8]={Q1_GPIO_Port,Q3_GPIO_Port,Q5_GPIO_Port,Q7_GPIO_Port,Q9_GPIO_Port,Q11_GPIO_Port,Q13_GPIO_Port,Q15_GPIO_Port};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,7 +84,15 @@ static void MX_USART2_UART_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin== GPIO_PIN_0) {
+	  SET_BITN(flags,0);
+  }
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	SET_BITN(flags,2);
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -117,17 +142,19 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  uint8_t data1[3]={0xB0,0x02,0x0F};
+  uint8_t data1[3]={0xB0,0x01,0x0F};
   uint8_t data2[3];
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
 
+  //CS for channel A resistor
   uint8_t data[1]={0xFE};
   HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
   HAL_SPI_Transmit(&hspi3, data, 1, 1000);
   HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
 
+  //change mode for resistor
   hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
@@ -169,24 +196,73 @@ int main(void)
 //  HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
 //  HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
 
-  HAL_GPIO_WritePin(Q1_GPIO_Port, Q1_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(Q2_GPIO_Port, Q2_Pin, GPIO_PIN_SET);
+//  HAL_GPIO_WritePin(Q1_GPIO_Port, Q1_Pin, GPIO_PIN_RESET);
+//  HAL_GPIO_WritePin(Q2_GPIO_Port, Q2_Pin, GPIO_PIN_SET);
+//  HAL_GPIO_WritePin(Q3_GPIO_Port, Q3_Pin, GPIO_PIN_RESET);
+//  HAL_GPIO_WritePin(Q4_GPIO_Port, Q4_Pin, GPIO_PIN_SET);
 
-  HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED3_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOC, LED2_Pin|LED4_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
 
   HAL_TIM_Base_Start_IT(&htim1);
-  uint8_t rx_data[5];
-  uint8_t tx_data[5]={0x01,0x02,0x03,0x04,0x05};
-  HAL_UART_Receive_DMA(&huart1,  rx_data, 5);
-  HAL_UART_Transmit_DMA(&huart2, tx_data, 5);
+  uint8_t rx_data[board_cnt];
+  uint8_t tx_data[board_cnt];
+  uint8_t data_tmp=0;
+  uint8_t ext_info_tmp=0;
+  uint8_t i=0;
+  HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
+  if (board_num==0){
+	  tx_data[0]=0x01;
+//	  tx_data[1]=0x02;
+//	  tx_data[2]=0x03;
+  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
+  }
   while (1)
   {
-	  HAL_GPIO_TogglePin(GPIOC, LED2_Pin|LED4_Pin);
+//	  HAL_GPIO_TogglePin(GPIOC, LED1_Pin);
+
+	  //output signal generated
 	  if(READ_BITN(flags,0)==1){
 		  RESET_BITN(flags,0);
-		  HAL_RTC_GetTime(&hrtc, sTime, Format);
-		  HAL_GPIO_TogglePin(GPIOC, LED1_Pin);
+		  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
+
+	  }
+	  //TIM1 (1ms) signal
+	  if(READ_BITN(flags,1)==1){
+		  RESET_BITN(flags,1);
+		  HAL_GPIO_TogglePin(GPIOC, LED3_Pin);
+		  last_spike+=1;
+		  spike_wid+=1;
+	  }
+	  //UART msg received
+	  if(READ_BITN(flags,2)==1){
+		  RESET_BITN(flags,2);
+		  HAL_GPIO_TogglePin(GPIOC, LED4_Pin);
+		  data_tmp=rx_data[board_num];
+		  //copy info about input types
+		  ext_info_tmp=ex_channels;
+		  i=0;
+		  while(data_tmp>0){
+			  if((data_tmp&0x01)==1){
+				  if((ext_info_tmp&0x01)==1){
+					  //if is exitatory pull down b port
+					  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_RESET);
+				  }
+				  else{
+					  //if is inhibitory pull down a port
+					  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_RESET);
+				  }
+				  spike_wid=0;
+				  while(spike_wid<3){}
+				  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_SET);
+				  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_SET);
+			  }
+			  i++;
+			  ext_info_tmp>>=1;
+			  data_tmp>>=1;
+		  }
+		  //
+		  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
+		  HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
 	  }
     /* USER CODE END WHILE */
 
@@ -443,7 +519,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 230400;
+  huart1.Init.BaudRate = 1000000;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -476,7 +552,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 230400;
+  huart2.Init.BaudRate = 1000000;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -554,11 +630,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : OUT_Pin */
-  GPIO_InitStruct.Pin = OUT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : PA0 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(OUT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CSPOW_Pin CS_CS_Pin Q4_Pin Q2_Pin
                            Q1_Pin */
@@ -577,6 +653,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
 }
 
@@ -602,7 +682,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   /* USER CODE BEGIN Callback 1 */
   else if (htim->Instance == TIM1) {
-	  SET_BITN(flags,0);
+	  SET_BITN(flags,1);
     }
   /* USER CODE END Callback 1 */
 }
