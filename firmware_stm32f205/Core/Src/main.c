@@ -58,7 +58,7 @@ uint8_t flags=0;
 //total boards in chain
 uint8_t board_cnt=3;
 //current board number
-uint8_t board_num=0;
+uint8_t board_num=2;
 //last spike time
 int32_t last_spike=0;
 //width of spike storage
@@ -194,9 +194,19 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  //set trigger level once, never touch again and change mode for weight update
-  uint8_t data1[3]={0xB0,0x01,0x80};
+  //enable O1 and O2
+  //0011 0001 0000 0000 0000 0000
+  uint8_t data1[3]={0x31,0x00,0x03};
   uint8_t data2[3];
+  HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
+  HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
+  HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
+  HAL_Delay(1);
+
+  //set trigger level once, never touch again and change mode for weight update
+  data1[0]=0xB0;
+  data1[1]=0x01;
+  data1[2]=0x88;
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
@@ -235,25 +245,16 @@ int main(void)
   uint8_t ext_info_tmp=0;
   uint8_t i=0;
   HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
-  if (board_num==0){
-	  tx_data[0]=0x55;
-	  tx_data[1]=0xAA;
-	  tx_data[2]=0xF5;
-  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
-  }
+//  if (board_num==0){
+//	  tx_data[0]=0x55;
+//	  tx_data[1]=0xAA;
+//	  tx_data[2]=0xF5;
+//  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
+//  }
   while (1)
   {
 //	  HAL_GPIO_TogglePin(GPIOC, LED1_Pin);
 
-	  //output signal generated
-	  if(READ_BITN(flags,0)==1){
-		  RESET_BITN(flags,0);
-		  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
-		  //need to update weight according to wired math and what spiked last time
-		  Hebb_weight_update(rx_data[board_num]);
-		  //change last spike time to negative value for emulating refactory period
-		  last_spike=-100;
-	  }
 	  //TIM1 (1ms) signal
 	  if(READ_BITN(flags,1)==1){
 		  RESET_BITN(flags,1);
@@ -285,12 +286,21 @@ int main(void)
 			  data_tmp>>=1;
 		  }
 
-		  while(spike_wid<3){}
+		  while(spike_wid<30){}
 		  for(i=0;i<8;i++){
 			  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_SET);
 		  	  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_SET);
 		  }
-
+		  //output signal generated
+		  if(READ_BITN(flags,0)==1){
+			  RESET_BITN(flags,0);
+			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
+			  //need to update weight according to wired math and what spiked last time
+			  //Hebb_weight_update(rx_data[board_num]);
+			  tx_data[0]=0x00;
+			  //change last spike time to negative value for emulating refactory period
+			  last_spike=-100;
+		  }
 		  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
 		  HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
 	  }
@@ -508,7 +518,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 120;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 1000;
+  htim1.Init.Period = 100;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -629,8 +639,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -661,11 +671,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  /*Configure GPIO pin : OUT_Pin */
+  GPIO_InitStruct.Pin = OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(OUT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CSPOW_Pin CS_CS_Pin Q4_Pin Q2_Pin
                            Q1_Pin */
