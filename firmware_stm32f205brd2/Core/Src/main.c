@@ -55,7 +55,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 /* USER CODE BEGIN PV */
 uint8_t flags=0;
 //total boards in chain
-uint8_t board_cnt=2;
+uint8_t board_cnt=3;
 //current board number
 uint8_t board_num=1;
 //last spike time
@@ -303,6 +303,7 @@ int main(void)
 			  //Hebb_weight_update(rx_data[board_num]);
 			  tx_data[0]=rx_data[0];
 			  tx_data[1]=rx_data[1];
+			  tx_data[2]=0xFF;
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
 		  }

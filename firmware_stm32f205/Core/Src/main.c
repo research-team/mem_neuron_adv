@@ -55,7 +55,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 /* USER CODE BEGIN PV */
 uint8_t flags=0;
 //total boards in chain
-uint8_t board_cnt=2;
+uint8_t board_cnt=3;
 //current board number
 uint8_t board_num=0;
 //last spike time

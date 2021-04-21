@@ -303,6 +303,7 @@ int main(void)
 			  //Hebb_weight_update(rx_data[board_num]);
 			  tx_data[0]=rx_data[0];
 			  tx_data[1]=rx_data[1];
+			  tx_data[2]=rx_data[2];
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
 		  }
