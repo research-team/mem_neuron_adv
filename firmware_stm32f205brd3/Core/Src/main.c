@@ -50,7 +50,6 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 uint8_t flags=0;
@@ -65,7 +64,7 @@ uint8_t spike_wid=0;
 uint8_t spike_wid_rst=0;
 //if channel is excitatory
 //bitwise info - all channels are excitatory
-uint8_t ex_channels = 0xFF;
+uint8_t ex_channels = 0x1F;
 //GPIO info for each channel;
 //signal level is Apin-Bpin
 uint16_t Apin[8]={Q2_Pin,Q4_Pin,Q6_Pin,Q8_Pin,Q10_Pin,Q12_Pin,Q14_Pin,Q16_Pin};
@@ -80,7 +79,6 @@ uint16_t weights[8]={0,0,0,0,0,0,0,0};
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_RTC_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
@@ -179,7 +177,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_RTC_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
@@ -205,7 +202,7 @@ int main(void)
   //set trigger level once, never touch again and change mode for weight update
   data1[0]=0xB0;
   data1[1]=0x01;
-  data1[2]=0x9A;
+  data1[2]=0xBB;
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
@@ -226,7 +223,7 @@ int main(void)
   uint8_t res_data_rx[2];
   uint8_t res_data_tx[2];
   res_data_tx[0]=0x04;
-  res_data_tx[1]=0xFF;
+  res_data_tx[1]=0x00;
   HAL_SPI_TransmitReceive(&hspi1, res_data_tx,res_data_rx, 2, 1000);
 
   cs_data[0]=0xFF;
@@ -247,26 +244,20 @@ int main(void)
 	  tx_data[i]=0;
 	  rx_data[i]=0;
   }
-  HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
 //  if (board_num==0){
 //	  tx_data[0]=0x55;
 //	  tx_data[1]=0xAA;
 //	  tx_data[2]=0xF5;
 //  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
 //  }
+  uint16_t delay=1;
+  HAL_StatusTypeDef status;
   while (1)
   {
 //	  HAL_GPIO_TogglePin(GPIOC, LED1_Pin);
-
-	  //TIM1 (1ms) signal
-	  if(READ_BITN(flags,1)==1){
-		  RESET_BITN(flags,1);
-		  HAL_GPIO_TogglePin(GPIOC, LED3_Pin);
-	  }
+	  status=HAL_UART_Receive(&huart1,  rx_data, board_cnt,10000);
+	  if(status!=HAL_TIMEOUT){
 	  //UART msg received
-	  if(READ_BITN(flags,2)==1){
-		  RESET_BITN(flags,2);
-		  HAL_UART_IRQHandler(&huart2);
 		  HAL_GPIO_TogglePin(GPIOC, LED4_Pin);
 		  data_tmp=rx_data[board_num];
 		  //copy info about input types
@@ -293,7 +284,7 @@ int main(void)
 		  while(spike_wid<30){}
 		  for(i=0;i<8;i++){
 			  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_SET);
-		  	  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_SET);
 		  }
 		  //output signal generated
 		  if(READ_BITN(flags,0)==1){
@@ -301,18 +292,27 @@ int main(void)
 			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
 			  //need to update weight according to wired math and what spiked last time
 			  //Hebb_weight_update(rx_data[board_num]);
-			  tx_data[0]=rx_data[0];
-			  tx_data[1]=rx_data[1];
+			  tx_data[0]=0;//rx_data[0]|0xE0;
+			  tx_data[1]=0;//rx_data[1]|0xE0;
 			  tx_data[2]=rx_data[2];
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
+//			  delay+=100;
 		  }
+		  else{
+			  tx_data[0]=rx_data[0]&(~0xE0);
+			  tx_data[1]=rx_data[1]&(~0xE0);
+			  tx_data[2]=rx_data[2];
+//			  if (delay>100){
+//				  delay-=100;
+//			  }
+		  }
+		  HAL_Delay(delay);
 		  HAL_UART_Transmit(&huart2, tx_data, board_cnt,1000);
 		  for(i=0;i<board_cnt;i++){
-		  	  tx_data[i]=0;
-		  	  rx_data[i]=0;
+			  tx_data[i]=0;
+			  rx_data[i]=0;
 		  }
-		  HAL_UART_Receive_DMA(&huart1,  rx_data, board_cnt);
 	  }
     /* USER CODE END WHILE */
 
@@ -620,22 +620,6 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA2_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA2_Stream2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -680,7 +664,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : OUT_Pin */
   GPIO_InitStruct.Pin = OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(OUT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CSPOW_Pin CS_CS_Pin Q4_Pin Q2_Pin
