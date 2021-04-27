@@ -64,7 +64,7 @@ uint8_t spike_wid=0;
 uint8_t spike_wid_rst=0;
 //if channel is excitatory
 //bitwise info - all channels are excitatory
-uint8_t ex_channels = 0x1F;
+uint8_t ex_channels = 0xFF;
 //GPIO info for each channel;
 //signal level is Apin-Bpin
 uint16_t Apin[8]={Q2_Pin,Q4_Pin,Q6_Pin,Q8_Pin,Q10_Pin,Q12_Pin,Q14_Pin,Q16_Pin};
@@ -240,10 +240,17 @@ int main(void)
   }
 
   uint8_t i=0;
+
   for(i=0;i<8;i++){
 	  set_cmd(i, 7, 2);
-  	  set_res(i,1023);
+  	  set_res(i,(i+1)*120);
   }
+//  for(i=1;i<8;i++){
+//	  set_res(1,10);
+//    }
+//  for(i=2;i<8;i++){
+//  	  set_res(i,200);
+//      }
 
   HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
 
