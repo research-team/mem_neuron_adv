@@ -76,8 +76,8 @@ all: main-build
 main-build: mem_neuro_adv_stm32f205brd3.elf secondary-outputs
 
 # Tool invocations
-mem_neuro_adv_stm32f205brd3.elf: $(OBJS) $(USER_OBJS) C:\Users\yurra\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205brd3\STM32F205RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205brd3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\yurra\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205brd3\STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205brd3.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+mem_neuro_adv_stm32f205brd3.elf: $(OBJS) $(USER_OBJS) C:\Users\YurBurGer\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205brd3\STM32F205RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "mem_neuro_adv_stm32f205brd3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\YurBurGer\Documents\EAGLE\projects\mem_neuron_adv\firmware_stm32f205brd3\STM32F205RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mem_neuro_adv_stm32f205brd3.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -95,6 +95,33 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	SET_BITN(flags,2);
 }
+void set_cmd(uint8_t num,uint8_t cmd,uint16_t val){
+	uint8_t cs_data[1];
+	cs_data[0]=~(1<<num);
+
+	uint8_t res_data_rx[2];
+	uint8_t res_data_tx[2];
+
+	//read datasheet carefully
+	//00 0001 00000 00000
+	//0000 0100 0000 0000
+	res_data_tx[0]=(cmd<<2)|(val>>8);
+	res_data_tx[1]=val&0XFF;
+
+	HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
+	HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
+
+	HAL_SPI_TransmitReceive(&hspi1, res_data_tx,res_data_rx, 2, 1000);
+
+	cs_data[0]=0xFF;
+	HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
+	HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
+}
+void set_res(uint8_t num,uint16_t val){
+	set_cmd(num,1,val);
+}
 void Hebb_weight_update(uint8_t last_spiked){
 	//do some wired math
 	//TODO:remake weight
@@ -211,27 +238,11 @@ int main(void)
   if (HAL_SPI_Init(&hspi1) != HAL_OK){
 	  Error_Handler();
   }
-
-  uint8_t cs_data[1];
-  cs_data[0]=0x00;
-  HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
-  HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
-
-  //read datasheet carefully
-  //0000 0100 0000 0000
-  uint8_t res_data_rx[2];
-  uint8_t res_data_tx[2];
-  res_data_tx[0]=0x04;
-  res_data_tx[1]=0xFF;
-  HAL_SPI_TransmitReceive(&hspi1, res_data_tx,res_data_rx, 2, 1000);
-
-  cs_data[0]=0xFF;
-  HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
-  HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
-
-
+  uint8_t i=0;
+  for(i=0;i<8;i++){
+	  set_cmd(i, 7, 2);
+	  set_res(i,1023);
+  }
   HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
 
   HAL_TIM_Base_Start_IT(&htim1);
@@ -239,7 +250,6 @@ int main(void)
   uint8_t tx_data[board_cnt];
   uint8_t data_tmp=0;
   uint8_t ext_info_tmp=0;
-  uint8_t i=0;
   for(i=0;i<board_cnt;i++){
 	  tx_data[i]=0;
 	  rx_data[i]=0;
@@ -574,7 +584,7 @@ static void MX_USART1_UART_Init(void)
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_RX;
+  huart1.Init.Mode = UART_MODE_TX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart1) != HAL_OK)
@@ -607,7 +617,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX;
+  huart2.Init.Mode = UART_MODE_RX;
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart2) != HAL_OK)
@@ -636,16 +646,15 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
-                          |Q7_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, CSPOW_Pin|CS_CS_Pin|Q4_Pin|Q2_Pin
                           |Q1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, Q8_Pin|Q12_Pin|Q10_Pin|Q9_Pin
-                          |Q3_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, Q7_Pin|Q8_Pin|Q12_Pin|Q10_Pin
+                          |Q9_Pin|Q3_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, Q6_Pin|Q5_Pin|Q15_Pin|Q16_Pin
@@ -665,7 +674,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : OUT_Pin */
   GPIO_InitStruct.Pin = OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(OUT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CSPOW_Pin CS_CS_Pin Q4_Pin Q2_Pin
