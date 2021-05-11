@@ -128,33 +128,18 @@ void Hebb_weight_update(uint8_t last_spiked){
 	//use last spike times to do some magic
 	uint8_t i=0;
 	for(i=0;i<8;i++){
+		weights[i]+=last_spike_time[i];
 		if (weights[i]>0x03FF){
 			weights[i]=0x03FF;
 		}
 	}
 	uint8_t ls_tmp=last_spiked;
-	uint8_t cs_data[1];
-	uint8_t res_data_tx[2];
-	uint8_t res_data_rx[2];
-	cs_data[0]=~1;
+	i=0;
 	while(ls_tmp>0){
 		//if this input spiked
 		if((ls_tmp&0x01)==1){
 			//CS for resistor
-			HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
-			HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
-			HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
-
-			//read datasheet carefully
-			//0000 0101 0000 0000
-			res_data_tx[0]=0x04|(weights[i]>>8);
-			res_data_tx[1]=weights[i]&0xFF;
-			HAL_SPI_TransmitReceive(&hspi1, res_data_tx,res_data_rx, 2, 1000);
-
-			cs_data[0]=0xFF;
-			HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_RESET);
-			HAL_SPI_Transmit(&hspi3, cs_data, 1, 1000);
-			HAL_GPIO_WritePin(CS_CS_GPIO_Port, CS_CS_Pin, GPIO_PIN_SET);
+			set_res(i,weights[i]);
 		}
 		else{
 			last_spike_time[i]+=last_spike;
@@ -163,7 +148,6 @@ void Hebb_weight_update(uint8_t last_spiked){
 				last_spike_time[i]=10000;
 			}
 		}
-		cs_data[0]=~(1<<i);
 		ls_tmp>>=1;
 		i++;
 	}
@@ -229,7 +213,7 @@ int main(void)
   //set trigger level once, never touch again and change mode for weight update
   data1[0]=0xB0;
   data1[1]=0x01;
-  data1[2]=0x9A;
+  data1[2]=0xDA;
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
@@ -243,7 +227,7 @@ int main(void)
 
   for(i=0;i<8;i++){
 	  set_cmd(i, 7, 2);
-  	  set_res(i,(i+1)*120);
+  	  set_res(i,weights[i]);
   }
 //  for(i=1;i<8;i++){
 //	  set_res(1,10);
@@ -269,7 +253,7 @@ int main(void)
 //	  tx_data[2]=0xF5;
 //  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
 //  }
-  uint16_t delay=1;
+  uint16_t delay=2000;
   HAL_StatusTypeDef status;
   while (1)
   {
@@ -288,7 +272,7 @@ int main(void)
 					  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_RESET);
 				  }
 				  else{
-					  //if is inhibitory pull down a port
+//					  if is inhibitory pull down a port
 					  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_RESET);
 				  }
 				  spike_wid=0;
@@ -304,26 +288,37 @@ int main(void)
 			  HAL_GPIO_WritePin(Aport[i], Apin[i], GPIO_PIN_SET);
 			  HAL_GPIO_WritePin(Bport[i], Bpin[i], GPIO_PIN_SET);
 		  }
-		  //output signal generated
+//		  output signal generated
 		  if(READ_BITN(flags,0)==1){
 			  RESET_BITN(flags,0);
 			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
-			  //need to update weight according to wired math and what spiked last time
-			  //Hebb_weight_update(rx_data[board_num]);
+//			  need to update weight according to wired math and what spiked last time
+//			  Hebb_weight_update(rx_data[board_num]);
 			  tx_data[0]=rx_data[0];
 			  tx_data[1]=rx_data[1]|0x1F;
-			  tx_data[2]=(rx_data[2]<<1)|1;
+			  tx_data[2]=rx_data[2];
+//			  tx_data[2]=(rx_data[2]<<1)|1;
+//			  for(i=0;i<5;i++){
+//				  weights[i]+=100;
+////				  weights[i]+=i;
+//				  if (weights[i]>1023){
+//					  weights[i]=1023;
+//				  }
+//				  set_res(i,weights[i]);
+//			  }
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
-//			  if (delay>100){
-//				  delay-=100;
-//			  }
+			  if (delay>100){
+				  delay-=100;
+			  }
 		  }
 		  else{
 			  tx_data[0]=rx_data[0];
 			  tx_data[1]=rx_data[1];
-			  tx_data[2]=rx_data[2]&(~0x03);
-//			  delay+=100;
+			  tx_data[2]=rx_data[2];
+			  if (delay<10000){
+				  delay+=100;
+			  }
 		  }
 		  HAL_Delay(delay);
 		  HAL_UART_Transmit(&huart2, tx_data, board_cnt,1000);

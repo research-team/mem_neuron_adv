@@ -241,7 +241,7 @@ int main(void)
   uint8_t i=0;
   for(i=0;i<8;i++){
 	  set_cmd(i, 7, 2);
-	  set_res(i,1023);
+	  set_res(i,weights[i]);
   }
   HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
 
@@ -265,7 +265,7 @@ int main(void)
   while (1)
   {
 //	  HAL_GPIO_TogglePin(GPIOC, LED1_Pin);
-	  status=HAL_UART_Receive(&huart1,  rx_data, board_cnt,10000);
+	  status=HAL_UART_Receive(&huart1,  rx_data, board_cnt,100000);
 
 	  //UART msg received
 	  if(status!=HAL_TIMEOUT){
@@ -305,7 +305,15 @@ int main(void)
 			  //Hebb_weight_update(rx_data[board_num]);
 			  tx_data[0]=rx_data[0]|0x1F;
 			  tx_data[1]=rx_data[1];
-			  tx_data[2]=(rx_data[2]<<1)|1;
+			  tx_data[2]=rx_data[2];
+			  for(i=0;i<5;i++){
+				  weights[i]+=100;
+//				  weights[i]+=i;
+				  if (weights[i]>1023){
+					  weights[i]=1023;
+				  }
+				  set_res(i,weights[i]);
+			  }
 //			  if (delay>100){
 //				  delay-=100;
 //			  }
@@ -315,7 +323,7 @@ int main(void)
 		  else{
 			  tx_data[0]=rx_data[0];
 			  tx_data[1]=rx_data[1];
-			  tx_data[2]=rx_data[2]&(~0x0C);
+			  tx_data[2]=rx_data[2];
 //			  delay+=100;
 		  }
 		  HAL_Delay(delay);
@@ -584,7 +592,7 @@ static void MX_USART1_UART_Init(void)
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX;
+  huart1.Init.Mode = UART_MODE_RX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart1) != HAL_OK)
@@ -617,7 +625,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_RX;
+  huart2.Init.Mode = UART_MODE_TX;
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart2) != HAL_OK)

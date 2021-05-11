@@ -304,16 +304,16 @@ int main(void)
 			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
 			  //need to update weight according to wired math and what spiked last time
 			  //Hebb_weight_update(rx_data[board_num]);
-			  tx_data[0]=0;//rx_data[0]|0xE0;
-			  tx_data[1]=0;//rx_data[1]|0xE0;
+			  tx_data[0]=rx_data[0];//rx_data[0]|0xE0;
+			  tx_data[1]=rx_data[1];//rx_data[1]|0xE0;
 			  tx_data[2]=rx_data[2];
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
 //			  delay+=100;
 		  }
 		  else{
-			  tx_data[0]=rx_data[0]&(~0xE0);
-			  tx_data[1]=rx_data[1]&(~0xE0);
+			  tx_data[0]=rx_data[0];
+			  tx_data[1]=rx_data[1];
 			  tx_data[2]=rx_data[2];
 //			  if (delay>100){
 //				  delay-=100;
