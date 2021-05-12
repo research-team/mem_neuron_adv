@@ -64,7 +64,7 @@ uint8_t spike_wid=0;
 uint8_t spike_wid_rst=0;
 //if channel is excitatory
 //bitwise info - all channels are excitatory
-uint8_t ex_channels = 0xFF;
+uint8_t ex_channels = 0x1F;
 //GPIO info for each channel;
 //signal level is Apin-Bpin
 uint16_t Apin[8]={Q2_Pin,Q4_Pin,Q6_Pin,Q8_Pin,Q10_Pin,Q12_Pin,Q14_Pin,Q16_Pin};
@@ -73,7 +73,8 @@ GPIO_TypeDef* Aport[8]={Q2_GPIO_Port,Q4_GPIO_Port,Q6_GPIO_Port,Q8_GPIO_Port,Q10_
 GPIO_TypeDef* Bport[8]={Q1_GPIO_Port,Q3_GPIO_Port,Q5_GPIO_Port,Q7_GPIO_Port,Q9_GPIO_Port,Q11_GPIO_Port,Q13_GPIO_Port,Q15_GPIO_Port};
 //weight collection
 int32_t last_spike_time[8]={0,0,0,0,0,0,0,0};
-uint16_t weights[8]={0,0,0,0,0,0,0,0};
+uint16_t weights[8]={100,200,400,400,500,700,800,900};
+//uint16_t weights[8]={100,200,200,200,200,700,800,900};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -213,7 +214,7 @@ int main(void)
   //set trigger level once, never touch again and change mode for weight update
   data1[0]=0xB0;
   data1[1]=0x01;
-  data1[2]=0xDA;
+  data1[2]=0xA0;
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
@@ -253,7 +254,7 @@ int main(void)
 //	  tx_data[2]=0xF5;
 //  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
 //  }
-  uint16_t delay=2000;
+  uint16_t delay=201;
   HAL_StatusTypeDef status;
   while (1)
   {
@@ -294,10 +295,22 @@ int main(void)
 			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
 //			  need to update weight according to wired math and what spiked last time
 //			  Hebb_weight_update(rx_data[board_num]);
-			  tx_data[0]=rx_data[0];
-			  tx_data[1]=rx_data[1]|0x1F;
+			  tx_data[0]=0;
+			  tx_data[1]=rx_data[0];
 			  tx_data[2]=rx_data[2];
 //			  tx_data[2]=(rx_data[2]<<1)|1;
+			  i=0;
+			  data_tmp=rx_data[board_num];
+			  while(data_tmp>0){
+				  if((data_tmp&0x01)==1){
+					  if(weights[i]>5){
+						  weights[i]-=5;
+					  }
+					  set_res(i,weights[i]);
+				  }
+				  i++;
+				  data_tmp>>=1;
+			  }
 //			  for(i=0;i<5;i++){
 //				  weights[i]+=100;
 ////				  weights[i]+=i;
@@ -308,16 +321,16 @@ int main(void)
 //			  }
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
-			  if (delay>100){
-				  delay-=100;
+			  if (delay>10){
+				  delay-=10;
 			  }
 		  }
 		  else{
-			  tx_data[0]=rx_data[0];
-			  tx_data[1]=rx_data[1];
+			  tx_data[0]=0;
+			  tx_data[1]=rx_data[0];
 			  tx_data[2]=rx_data[2];
 			  if (delay<10000){
-				  delay+=100;
+				  delay+=10;
 			  }
 		  }
 		  HAL_Delay(delay);

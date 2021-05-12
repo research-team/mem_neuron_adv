@@ -73,7 +73,7 @@ GPIO_TypeDef* Aport[8]={Q2_GPIO_Port,Q4_GPIO_Port,Q6_GPIO_Port,Q8_GPIO_Port,Q10_
 GPIO_TypeDef* Bport[8]={Q1_GPIO_Port,Q3_GPIO_Port,Q5_GPIO_Port,Q7_GPIO_Port,Q9_GPIO_Port,Q11_GPIO_Port,Q13_GPIO_Port,Q15_GPIO_Port};
 //weight collection
 int32_t last_spike_time[8]={0,0,0,0,0,0,0,0};
-uint16_t weights[8]={0,0,0,0,0,0,0,0};
+uint16_t weights[8]={100,200,400,400,500,700,800,900};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -229,7 +229,7 @@ int main(void)
   //set trigger level once, never touch again and change mode for weight update
   data1[0]=0xB0;
   data1[1]=0x01;
-  data1[2]=0xDA;
+  data1[2]=0xA0;
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive(&hspi1, data1,data2, 3, 1000);
   HAL_GPIO_WritePin(CSPOW_GPIO_Port, CSPOW_Pin, GPIO_PIN_SET);
@@ -260,7 +260,7 @@ int main(void)
 //	  tx_data[2]=0xF5;
 //  	  HAL_UART_Transmit_DMA(&huart2, tx_data, board_cnt);
 //  }
-  uint16_t delay=1;
+  uint16_t delay=201;
   HAL_StatusTypeDef status;
   while (1)
   {
@@ -303,28 +303,45 @@ int main(void)
 			  HAL_GPIO_TogglePin(GPIOC, LED2_Pin);
 			  //need to update weight according to wired math and what spiked last time
 			  //Hebb_weight_update(rx_data[board_num]);
-			  tx_data[0]=rx_data[0]|0x1F;
-			  tx_data[1]=rx_data[1];
+			  tx_data[0]=rx_data[1]^0x1B;
+			  tx_data[1]=0;
 			  tx_data[2]=rx_data[2];
-			  for(i=0;i<5;i++){
-				  weights[i]+=100;
-//				  weights[i]+=i;
-				  if (weights[i]>1023){
-					  weights[i]=1023;
+			  i=0;
+			  data_tmp=rx_data[board_num];
+			  while(data_tmp>0){
+				  if((data_tmp&0x01)==1){
+					  if(weights[i]>5){
+						  weights[i]-=5;
+					  }
+					  set_res(i,weights[i]);
 				  }
-				  set_res(i,weights[i]);
+				  i++;
+				  data_tmp>>=1;
 			  }
+//			  for(i=0;i<5;i++){
+//				  weights[i]+=100;
+////				  weights[i]+=i;
+//				  if (weights[i]>1023){
+//					  weights[i]=1023;
+//				  }
+//				  set_res(i,weights[i]);
+//			  }
 //			  if (delay>100){
 //				  delay-=100;
 //			  }
 			  //change last spike time to negative value for emulating refactory period
 			  last_spike=-100;
+			  if (delay>10){
+				  delay-=10;
+			  }
 		  }
 		  else{
-			  tx_data[0]=rx_data[0];
-			  tx_data[1]=rx_data[1];
+			  tx_data[0]=rx_data[1]^0x1B;
+			  tx_data[1]=0;
 			  tx_data[2]=rx_data[2];
-//			  delay+=100;
+			  if (delay<10000){
+				  delay+=10;
+			  }
 		  }
 		  HAL_Delay(delay);
 		  HAL_UART_Transmit(&huart2, tx_data, board_cnt,1000);
